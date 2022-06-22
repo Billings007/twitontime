@@ -2,8 +2,8 @@ import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col justify-center items-center align-middle h-screen">
-      <div>test</div>
+    <div className="flex flex-col items-center justify-center h-screen align-middle">
+      <h1 className="text-4xl font-extrabold">RAD Starter</h1>
     </div>
   );
 };
