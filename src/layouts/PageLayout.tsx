@@ -3,5 +3,5 @@ interface PageLayoutProps {
 }
 
 export default function PageLayout({ children }: PageLayoutProps) {
-  return <div className="max-w-9xl mx-auto px-2 sm:px-6 lg:px-8">{children}</div>;
+  return <div className="max-w-9xl bg-darkMode-1">{children}</div>;
 }
