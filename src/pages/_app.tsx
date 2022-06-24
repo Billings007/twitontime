@@ -1,5 +1,5 @@
 import PageLayout from '@layouts/PageLayout';
-import { Provider as NextAuthProvider } from 'next-auth/react';
+import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
