@@ -3,7 +3,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth from 'next-auth';
 import TwitterProvider from 'next-auth/providers/twitter';
 
-const options = {
+export default NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     TwitterProvider({
@@ -12,8 +12,5 @@ const options = {
       version: '2.0',
     }),
   ],
-
   secret: process.env.SECRET,
-};
-
-export default NextAuth(options);
+});
