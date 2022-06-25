@@ -1,9 +1,7 @@
+import prisma from '@libs/clients/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
 import NextAuth from 'next-auth';
 import TwitterProvider from 'next-auth/providers/twitter';
-
-const prisma = new PrismaClient();
 
 const options = {
   adapter: PrismaAdapter(prisma),
@@ -14,14 +12,8 @@ const options = {
       version: '2.0',
     }),
   ],
-/*
+
   secret: process.env.SECRET,
-
-  session: { jwt: true },
-
-  pages: {
-    //to fill with sign in, error, and new user page
-  },*/
 };
 
 export default NextAuth(options);
