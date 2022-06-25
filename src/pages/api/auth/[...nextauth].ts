@@ -14,6 +14,20 @@ const options = {
       version: '2.0',
     }),
   ],
+
+  secret: process.env.SECRET,
+
+  session: { jwt: true },
+
+  pages: {
+    //to fill with sign in, error, and new user page
+  },
+
+  callbacks: {
+    async redirect(url, baseurl) {
+      return 'http://localhost:3000/';
+    },
+  },
 };
 
 export default NextAuth(options);
