@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: [],
+    domains: ['pbs.twimg.com'],
   },
   env: {
     BASE_URL: process.env.BASE_URL,
