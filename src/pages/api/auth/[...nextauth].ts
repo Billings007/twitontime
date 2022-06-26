@@ -28,6 +28,19 @@ export default NextAuth({
     }),
   ],
   secret: process.env.SECRET,
+  pages: {
+    signIn:"/signin"
+  },
+  callbacks: {
+    jwt: async ({ token, account }) => {
+      account && (token.user = account);
+      return token;
+    },
+    session: async ({ session, token, user }) => {
+      session.accessToken = token.accessToken;
+      return session;
+    },
+  },
 });
 
 /*
