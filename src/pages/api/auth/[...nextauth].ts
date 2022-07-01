@@ -17,21 +17,15 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  secret: process.env.SECRET,
-  pages: {
-    signIn:"/signin"
-  },
   callbacks: {
-    jwt: async ({ token, account }) => {
-      account && (token.user = account);
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
       return token;
     },
-    session: async ({ session, token, user }) => {
+    async session({ session, token, user }) {
       session.accessToken = token.accessToken;
-      return session;
-    },
-  },
-});
 
       return session;
     },
