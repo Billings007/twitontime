@@ -8,7 +8,10 @@ interface PostTweetProps {
 }
 
 export async function PostTweet({ tweetBody }: PostTweetProps) {
-  await client.tweets.createTweet({
-    text: tweetBody,
-  });
+  console.log(tweetBody),
+    await client.tweets
+      .createTweet({
+        text: tweetBody,
+      })
+      .catch((err) => console.log(err));
 }

@@ -1,12 +1,12 @@
-import { PostTweet } from '@libs/clients/twitter';
+import { PostTweet } from '@compnents/postTweet';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
   const { data } = useSession();
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>('Hello World!');
 
   const handleTweetPost = () => {
     if (text.length > 0) {
@@ -31,9 +31,11 @@ const Home: NextPage = () => {
           <textarea
             onChange={(e) => setText(e.target.value)}
             className="w-full rounded-md ring-gray-400 ring-offset-2 ring-4 sm:w-96"
-            rows={5}
+            rows={3}
           />
-          <button className="px-2 py-3 mt-10 bg-white rounded-md">Send Tweet</button>
+          <button type="submit" value="Submit" className="px-2 py-3 mt-10 bg-white rounded-md">
+            Send Tweet
+          </button>
         </form>
       </div>
     );
