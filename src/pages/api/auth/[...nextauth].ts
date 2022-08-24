@@ -2,7 +2,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import TwitterProvider from 'next-auth/providers/twitter';
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID!,
