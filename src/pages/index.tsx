@@ -2,6 +2,7 @@ import TextAreaInput from '@compnents/TextArea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import classNames from '@utils/classNames';
 import { trpc } from '@utils/trpc';
+import { PostTweet } from '@compnents/postTweet';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -37,8 +38,10 @@ function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   );
 }
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
   const { data } = useSession();
+
+  const [text, setText] = useState<string>('Hello World!');
 
   //* New Router. isSuccess is a general boolean that we can use for conditional functions. For example, maybe we want to change the button text based on if the tweet was sent successfully. isSuccess ? 'Tweet Sent!' : 'Send Tweet'.//
 
@@ -97,6 +100,7 @@ const Home: NextPage = () => {
         <p className="text-white">Hello {data.user.name}</p>
 
         <Image src={img} width="40" height="40" alt="" />
+
         <form onSubmit={handleSubmit(handleTweetPost)} className="flex flex-col mt-10">
           <TextAreaInput
             name="tweetbody"
@@ -113,6 +117,14 @@ const Home: NextPage = () => {
             className="px-2 py-3 mt-10 bg-white rounded-md"
           >
             {isSuccess ? 'Tweet Sent!' : 'Send Tweet'}
+        <form onSubmit={handleTweetPost} className="flex flex-col mt-10">
+          <textarea
+            onChange={(e) => setText(e.target.value)}
+            className="w-full rounded-md ring-gray-400 ring-offset-2 ring-4 sm:w-96"
+            rows={3}
+          />
+          <button type="submit" value="Submit" className="px-2 py-3 mt-10 bg-white rounded-md">
+            Send Tweet
           </button>
         </form>
       </div>
