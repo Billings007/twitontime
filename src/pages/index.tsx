@@ -15,6 +15,12 @@ const tweetSchema = z.object({
 
 type TweetSchema = z.output<typeof tweetSchema>;
 
+const userSchema = z.object({
+  username: z.string(),
+});
+
+type userSchema = z.output<typeof userSchema>;
+
 function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   const textArea = useWatch({
     control,
@@ -43,6 +49,7 @@ const Home: NextPage = () => {
   //* New Router. isSuccess is a general boolean that we can use for conditional functions. For example, maybe we want to change the button text based on if the tweet was sent successfully. isSuccess ? 'Tweet Sent!' : 'Send Tweet'.//
 
   const { isSuccess, isLoading, ...postRouter } = trpc.useMutation(['post']);
+  //const {isFetched, isFetching, ...getRouter } = trpc.useQuery(['lookup']);
 
   //* Optional schema validation. Technically we're doing this in server/tweet/index. You can even just create a schema folder with schemas like this, then import them into server/tweet/index */
 
