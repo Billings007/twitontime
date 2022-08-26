@@ -5,8 +5,7 @@ import { trpc } from '@utils/trpc';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Control, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -38,9 +37,8 @@ function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   );
 }
 
-const Home: NextPage = (props) => {
+const Home: NextPage = () => {
   const { data } = useSession();
-  const [text, setText] = useState<string>('Hello World!');
 
   //* New Router. isSuccess is a general boolean that we can use for conditional functions. For example, maybe we want to change the button text based on if the tweet was sent successfully. isSuccess ? 'Tweet Sent!' : 'Send Tweet'.//
 
