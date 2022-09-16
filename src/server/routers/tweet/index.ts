@@ -5,6 +5,15 @@ import { postTweet } from './postTweet';
 import { userLookup } from './userLookup';
 
 export const tweetrouter = createRouter()
+  .mutation('lookup', {
+    input: z.object({
+      username: z.string(),
+      token: z.unknown().optional(),
+    }),
+    async resolve({ input }) {
+      return await userLookup(input.username, input.token);
+    },
+  })
   .mutation('post', {
     input: z.object({
       tweetbody: z.string(),
@@ -23,13 +32,3 @@ export const tweetrouter = createRouter()
       return await deleteTweet(input.tweetID, input.token);
     },
   });
-
-export const userRouter = createRouter().query('lookup', {
-  input: z.object({
-    username: z.string(),
-    token: z.string(),
-  }),
-  async resolve({ input }) {
-    return await userLookup(input.username, input.token);
-  },
-});
