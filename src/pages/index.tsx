@@ -43,13 +43,13 @@ function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   );
 }
 
- function WatchSearchArea({ control2 }: { control2: Control<UserSchema> }) {
-   const searchBar = useWatch({
-     control2,
-     defaultValue: '',
-     name: 'username',
-   });
- }
+function WatchSearchArea({ control2 }: { control2: Control<UserSchema> }) {
+  const searchBar = useWatch({
+    control2,
+    defaultValue: '',
+    name: 'username',
+  });
+}
 
 const Home: NextPage = (props) => {
   const { data } = useSession();
