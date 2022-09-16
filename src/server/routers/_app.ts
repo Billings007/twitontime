@@ -1,7 +1,7 @@
 import { createRouter } from '../createRouter';
 import { router as auth } from './auth';
-import { tweetrouter } from './tweet';
+import { tweetrouter, userRouter } from './tweet';
 
-export const appRouter = createRouter().merge('auth.', auth).merge(tweetrouter);
+export const appRouter = createRouter().merge('auth.', auth).merge(tweetrouter).merge(userRouter);
 
 export type AppRouter = typeof appRouter;

@@ -19,7 +19,7 @@ const userSchema = z.object({
   username: z.string(),
 });
 
-type userSchema = z.output<typeof userSchema>;
+type UserSchema = z.output<typeof userSchema>;
 
 function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   const textArea = useWatch({
@@ -43,13 +43,21 @@ function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   );
 }
 
-const Home: NextPage = () => {
+ function WatchSearchArea({ control2 }: { control2: Control<UserSchema> }) {
+   const searchBar = useWatch({
+     control2,
+     defaultValue: '',
+     name: 'username',
+   });
+ }
+
+const Home: NextPage = (props) => {
   const { data } = useSession();
 
   //* New Router. isSuccess is a general boolean that we can use for conditional functions. For example, maybe we want to change the button text based on if the tweet was sent successfully. isSuccess ? 'Tweet Sent!' : 'Send Tweet'.//
 
   const { isSuccess, isLoading, ...postRouter } = trpc.useMutation(['post']);
-  //const {isFetched, isFetching, ...getRouter } = trpc.useQuery(['lookup']);
+  const { isFetched, isFetching, ...getRouter } = trpc.useQuery(['lookup']);
 
   //* Optional schema validation. Technically we're doing this in server/tweet/index. You can even just create a schema folder with schemas like this, then import them into server/tweet/index */
 
@@ -68,6 +76,32 @@ const Home: NextPage = () => {
       tweetbody: '',
     },
   });
+
+  const {
+    control: control2,
+    hanndleSubmit: handleSubmit2,
+    reset: reset2,
+    formState: formState2,
+    formState: { errors: errors2 },
+  } = useForm<UserSchema>({
+    resolver: zodResolver(userSchema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      username: '',
+    },
+  });
+
+  const handleUserLookup: SubmitHandler<UserSchema> = async (values) => {
+    const validation = await userSchema.safeParseAsync(values);
+    if (!validation.success) {
+      return;
+    }
+    if (validation.success) {
+      if (data && data.accessToken) {
+        await getRouter.status;
+      }
+    }
+  };
 
   const handleTweetPost: SubmitHandler<TweetSchema> = async (values) => {
     const validation = await tweetSchema.safeParseAsync(values);
