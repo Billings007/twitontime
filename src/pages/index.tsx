@@ -1,4 +1,4 @@
-import TextAreaInput from '@compnents/TextArea';
+import TextAreaInput from '@components/TextArea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import classNames from '@utils/classNames';
 import { trpc } from '@utils/trpc';
@@ -7,6 +7,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { Control, SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import DeleteTweet from 'src/features/DeleteTweet';
 import { z } from 'zod';
 
 const tweetSchema = z.object({
@@ -37,7 +38,7 @@ function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
   );
 }
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
   const { data } = useSession();
 
   //* New Router. isSuccess is a general boolean that we can use for conditional functions. For example, maybe we want to change the button text based on if the tweet was sent successfully. isSuccess ? 'Tweet Sent!' : 'Send Tweet'.//
@@ -85,6 +86,7 @@ const Home: NextPage = () => {
   });
 
   if (data?.user) {
+    console.log(data.accessToken);
     const img = data.user.image as string;
     return (
       <div className="flex flex-col items-center justify-center h-screen align-middle">
@@ -97,6 +99,8 @@ const Home: NextPage = () => {
         <p className="text-white">Hello {data.user.name}</p>
 
         <Image src={img} width="40" height="40" alt="" />
+        <DeleteTweet userToken={data.accessToken} />
+
         <form onSubmit={handleSubmit(handleTweetPost)} className="flex flex-col mt-10">
           <TextAreaInput
             name="tweetbody"
