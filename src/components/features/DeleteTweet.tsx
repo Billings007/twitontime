@@ -29,7 +29,7 @@ export default function DeleteTweet({ userToken }: TokenProps) {
     console.log(deleteRouter.status);
     {
       await deleteRouter.mutateAsync({
-        tweetID: data.tweetId,
+        tweetId: data.tweetId,
         token: userToken as string,
       });
     }

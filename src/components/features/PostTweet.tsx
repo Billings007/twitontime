@@ -58,7 +58,7 @@ export default function PostTweet({ userToken }: TweetProps) {
   const onSubmit = async (data: TweetSchema) => {
     if (data.tweetbody.length <= 280) {
       await postRouter.mutateAsync({
-        tweetbody: data.tweetbody,
+        tweetBody: data.tweetbody,
         token: userToken as string,
       });
       formState.isSubmitSuccessful;

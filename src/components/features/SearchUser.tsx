@@ -23,7 +23,7 @@ export default function SearchForm({ userToken }: SearchFormProps) {
     resolver: zodResolver(userSchema),
   });
 
-  const { ...userRouter } = trpc.useMutation(['lookupUser']);
+  const { ...userRouter } = trpc.useMutation(['userLookup']);
 
   const onSubmit = async (data: UserSchema) => {
     {

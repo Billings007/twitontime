@@ -1,7 +1,7 @@
 import classNames from '@utils/classNames';
 import { Controller, FieldError, FieldValues, UseControllerProps } from 'react-hook-form';
 
-interface TextAreaProps<T> extends UseControllerProps<T> {
+interface TextAreaProps<T extends FieldValues> extends UseControllerProps<T> {
   label?: string;
   error: FieldError | undefined;
   value?: string;
