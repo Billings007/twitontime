@@ -1,4 +1,4 @@
-import Input from '@components/input';
+import Input from '@components/input/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { trpc } from '@utils/trpc';
 import { useForm } from 'react-hook-form';
@@ -23,7 +23,7 @@ export default function DeleteTweet({ userToken }: TokenProps) {
     resolver: zodResolver(deleteSchema),
   });
 
-  const { isSuccess, isError, ...deleteRouter } = trpc.useMutation(['delete']);
+  const { isSuccess, isError, ...deleteRouter } = trpc.useMutation(['deleteTweet']);
 
   const onSubmit = async (data: DeleteSchema) => {
     console.log(deleteRouter.status);

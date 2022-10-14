@@ -1,4 +1,4 @@
-import TextAreaInput from '@components/TextArea';
+import TextAreaInput from '@components/input/TextArea'
 import { zodResolver } from '@hookform/resolvers/zod';
 import classNames from '@utils/classNames';
 import { trpc } from '@utils/trpc';
@@ -53,7 +53,7 @@ export default function PostTweet({ userToken }: TweetProps) {
     },
   });
 
-  const { isSuccess, isLoading, ...postRouter } = trpc.useMutation(['post']);
+  const { isSuccess, isLoading, ...postRouter } = trpc.useMutation(['postTweet']);
 
   const onSubmit = async (data: TweetSchema) => {
     if (data.tweetbody.length <= 280) {
@@ -63,10 +63,12 @@ export default function PostTweet({ userToken }: TweetProps) {
       });
       formState.isSubmitSuccessful;
     } else {
+      //Does this actually return?
       return ("Your tweet is too long!")
     }
   };
 
+  //does this work?
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
       reset();

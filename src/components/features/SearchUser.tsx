@@ -1,4 +1,4 @@
-import Input from '@components/input';
+import Input from '@components/input/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { trpc } from '@utils/trpc';
 import { useForm } from 'react-hook-form';
@@ -23,7 +23,7 @@ export default function SearchForm({ userToken }: SearchFormProps) {
     resolver: zodResolver(userSchema),
   });
 
-  const { ...userRouter } = trpc.useMutation(['lookup']);
+  const { ...userRouter } = trpc.useMutation(['lookupUser']);
 
   const onSubmit = async (data: UserSchema) => {
     {

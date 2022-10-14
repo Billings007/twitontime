@@ -1,25 +1,15 @@
-import LogoutButton from '@components/LogoutButton';
 import type { NextPage } from 'next';
 import { signIn, useSession } from 'next-auth/react';
-import Image from 'next/image';
-import DeleteTweet from 'src/features/DeleteTweet';
-import PostTweet from 'src/features/PostTweet';
-import SearchForm from 'src/features/SearchUser';
 
-const Home: NextPage = (props) => {
+
+const Home: NextPage = () => {
   const { data } = useSession();
 
   if (data?.user) {
     console.log(data.accessToken);
-    const img = data.user.image as string;
     return (
       <div className="flex flex-col items-center justify-center h-screen align-middle">
-        <p className="text-white">Hello {data.user.name}</p>
-        <Image src={img} width="40" height="40" alt="" />
-        <DeleteTweet userToken={data.accessToken} />
-        <SearchForm userToken={data.accessToken} />
-        <PostTweet userToken={data.accessToken} />
-        <LogoutButton userToken={data.accessToken} />
+        <a className='justify-center flex-auto text-center text-large text-darkMode-4 '>Hi There! Use this page as a filler for the future!</a>
       </div>
     );
   }
