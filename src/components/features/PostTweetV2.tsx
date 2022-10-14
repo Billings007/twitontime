@@ -1,4 +1,4 @@
-import TextArea from '@components/input/TextArea';
+import TextAreaV2 from '@components/input/TextAreaV2';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { Form } from '@unform/web';
 import classNames from '@utils/classNames';
@@ -32,7 +32,7 @@ export default function PostTweet({ token }: Partial<PostTweetSchema>) {
 
   return (
     <Form ref={formRef} onSubmit={handlePost} className="w-full max-w-xl">
-      <TextArea
+      <TextAreaV2
         label="Post a tweet"
         name="tweetBody"
         value={tweetBody}
