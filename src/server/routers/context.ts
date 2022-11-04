@@ -1,5 +1,5 @@
 // src/server/router/context.ts
-import * as trpc from '@trpc/server';
+import * as trpc from '@trpc/client';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../../pages/api/auth/[...nextauth]';
