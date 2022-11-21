@@ -19,6 +19,7 @@
     "@trpc/server": "10.0.0-proxy-beta.25",
     "@unform/core": "^2.1.6",
     "@unform/web": "^2.1.6",
+    "critters": "^0.0.16",
     "next": "12.3.1",
     "next-auth": "^4.10.3",
     "pnpm": "^7.12.2",
@@ -27,7 +28,7 @@
     "react-query": "3.39.2",
     "superjson": "^1.10.0",
     "twitter-api-sdk": "^1.1.0",
-    "zod": "^3.18.0"
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/node": "18.0.0",

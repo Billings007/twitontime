@@ -1,48 +1,44 @@
 import Input from '@components/input/input';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { DeleteTweetSchema, deleteTweetSchema } from '@data/schemas/TweetSchemas';
+import { FormHandles, SubmitHandler } from '@unform/core';
+import { Form } from '@unform/web';
 import { trpc } from '@utils/trpc';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useRef, useState } from 'react';
 
-const deleteSchema = z.object({
-  tweetId: z.string(),
-});
-
-type DeleteSchema = z.output<typeof deleteSchema>;
-
-interface TokenProps {
-  userToken: string | undefined | unknown;
-}
-
-export default function DeleteTweet({ userToken }: TokenProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<DeleteSchema>({
-    resolver: zodResolver(deleteSchema),
-  });
+export default function DeleteTweet({ token }: Partial<DeleteTweetSchema>) {
+  const formRef = useRef<FormHandles>(null);
+  const [tweetID, setTweetID] = useState<string>('');
 
   const { isSuccess, isError, ...deleteRouter } = trpc.useMutation(['deleteTweet']);
 
-  const onSubmit = async (data: DeleteSchema) => {
-    console.log(deleteRouter.status);
-    {
-      await deleteRouter.mutateAsync({
-        tweetId: data.tweetId,
-        token: userToken as string,
+  const handleDelete: SubmitHandler<DeleteTweetSchema> = async (data) => {
+    const validateID = deleteTweetSchema.safeParse(data);
+    if (!validateID.success) {
+      validateID.error.issues.forEach((issue) => {
+        formRef.current?.setFieldError(issue.path.join('.'), issue.message);
       });
+    }
+    if (validateID.success) {
+      await deleteRouter.mutateAsync({
+        token: token,
+        tweetID: data.tweetId,
+      });
+      formRef.current?.reset();
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {deleteRouter.data?.toString()}
-      <Input type="text" {...register('tweetId')} error={errors.tweetId} label="Delete Tweet" />
-
-      <button type="submit">
-        {isSuccess ? 'Success' : isError ? deleteRouter.error?.data?.code : 'Submit'}
+    <Form ref={formRef} onSubmit={handleDelete} className="w-full max-w-xl">
+      <Input
+        type="text"
+        label="Delete a Tweet"
+        name="tweetID"
+        value={tweetID}
+        onChange={(e) => setTweetID(e.currentTarget.value)}
+      />
+      <button className="py-2 px-3 border-2 border-transparent bg-blue-600 rounded-xl text-white font-bold text-lg shadow-xl hover:shadow-none hover:bg-blue-400 duration-300 transition-all">
+        {isSuccess ? 'Post Deleted!' : 'Type ID'}
       </button>
-    </form>
+    </Form>
   );
 }

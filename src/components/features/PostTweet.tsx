@@ -1,94 +1,55 @@
-import TextAreaInput from '@components/input/TextArea'
-import { zodResolver } from '@hookform/resolvers/zod';
+import TextArea from '@components/input/TextArea';
+import { FormHandles, SubmitHandler } from '@unform/core';
+import { Form } from '@unform/web';
 import classNames from '@utils/classNames';
 import { trpc } from '@utils/trpc';
-import { useEffect } from 'react';
-import { Control, useForm, useWatch } from 'react-hook-form';
-import { z } from 'zod';
+import { useRef, useState } from 'react';
+import { postTweetSchema, PostTweetSchema } from 'src/data/schemas/TweetSchemas'; //Why @ not work
 
-const tweetSchema = z.object({
-  tweetbody: z.string().min(1, { message: 'Tweet must be at least 1 characters' }),
-});
+export default function PostTweet({ token }: Partial<PostTweetSchema>) {
+  const formRef = useRef<FormHandles>(null);
+  const [tweetBody, setTweetBody] = useState<string>('');
+  const limit = tweetBody?.length > 280;
+  const limitCaution = tweetBody?.length > 220 && tweetBody?.length < 280;
 
-type TweetSchema = z.output<typeof tweetSchema>;
+  const { isSuccess, ...postTweetRouter } = trpc.useMutation(['postTweet']);
 
-interface TweetProps {
-  userToken: string | undefined | unknown;
-}
-
-function WatchTextArea({ control }: { control: Control<TweetSchema> }) {
-  const textArea = useWatch({
-    control,
-    defaultValue: '',
-    name: 'tweetbody',
-  });
-  const limit = textArea.length > 280;
-  const limitCaution = textArea.length > 220 && textArea.length < 280;
-
-  return (
-    <p
-      className={classNames(
-        limit ? 'text-red-400' : '',
-        limitCaution ? 'text-red-500' : 'text-white',
-        'text-right text-sm'
-      )}
-    >
-      {textArea.length}
-    </p>
-  );
-}
-
-export default function PostTweet({ userToken }: TweetProps) {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState,
-    formState: { errors },
-  } = useForm<TweetSchema>({
-    resolver: zodResolver(tweetSchema),
-    reValidateMode: 'onChange',
-    defaultValues: {
-      tweetbody: '',
-    },
-  });
-
-  const { isSuccess, isLoading, ...postRouter } = trpc.useMutation(['postTweet']);
-
-  const onSubmit = async (data: TweetSchema) => {
-    if (data.tweetbody.length <= 280) {
-      await postRouter.mutateAsync({
-        tweetBody: data.tweetbody,
-        token: userToken as string,
+  const handlePost: SubmitHandler<PostTweetSchema> = async (data) => {
+    const validatePost = postTweetSchema.safeParse(data);
+    if (!validatePost.success) {
+      validatePost.error.issues.forEach((issue) => {
+        formRef.current?.setFieldError(issue.path.join('.'), issue.message);
       });
-      formState.isSubmitSuccessful;
-    } else {
-      //Does this actually return?
-      return ("Your tweet is too long!")
+    }
+    if (validatePost.success) {
+      await postTweetRouter.mutateAsync({
+        token: token,
+        tweetBody: data.tweetBody,
+      });
+      formRef.current?.reset();
     }
   };
 
-  //does this work?
-  useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset();
-    }
-  });
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <TextAreaInput
-        name="tweetbody"
-        error={errors.tweetbody}
-        defaultValue=""
-        value={formState.isSubmitSuccessful ? '' : undefined}
-        control={control}
-        label="Write tweet here"
+    <Form ref={formRef} onSubmit={handlePost} className="w-full max-w-xl">
+      <TextArea
+        label="Post a tweet"
+        name="tweetBody"
+        value={tweetBody}
+        onChange={(e) => setTweetBody(e.currentTarget.value)}
       />
-      <WatchTextArea control={control} />
-      <button type="submit" disabled={isLoading} className="px-2 py-3 mt-10 bg-white rounded-md">
+      <div
+        className={classNames(
+          limit ? 'text-red-500 font-bold' : '',
+          limitCaution ? 'text-red-400 font-semibold' : '',
+          'mt-1 text-right select-none transition-colors duration-1000'
+        )}
+      >
+        {tweetBody.length}/280
+      </div>
+      <button className="py-2 px-3 border-2 border-transparent bg-blue-600 rounded-xl text-white font-bold text-lg shadow-xl hover:shadow-none hover:bg-blue-400 duration-300 transition-all">
         {isSuccess ? 'Tweet Sent!' : 'Send Tweet'}
       </button>
-    </form>
+    </Form>
   );
 }

@@ -1,47 +1,57 @@
+import { useField } from '@unform/core';
+import { useEffect, useRef } from 'react';
 import classNames from '@utils/classNames';
-import { Controller, FieldError, FieldValues, UseControllerProps } from 'react-hook-form';
 
-interface TextAreaProps<T extends FieldValues> extends UseControllerProps<T> {
+interface DefaultTextAreaProps {
+  name: string;
   label?: string;
-  error: FieldError | undefined;
-  value?: string;
+  disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-const TextAreaInput = <T extends FieldValues>({
-  name,
-  label,
-  control,
-  error,
-  value,
-  defaultValue,
-}: TextAreaProps<T>) => {
-  return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      render={({ field: { onChange } }) => (
-        <>
-          <label className="flex flex-col space-y-2">
-            <span className="sr-only">{label}</span>
-            <textarea
-              id="textarea"
-              name={name}
-              value={value}
-              onChange={onChange}
-              required
-              rows={5}
-              className={classNames(
-                error ? 'ring-red-400' : 'ring-gray-400',
-                'w-full rounded-md ring-offset-2 ring-4 sm:w-96 outline-none focus:ring-blue-200 p-2'
-              )}
-            />
-            <span className="text-red-500">{error?.message}</span>
-          </label>
-        </>
-      )}
-    ></Controller>
-  );
-};
+type TextAreaProps = JSX.IntrinsicElements['textarea'] & DefaultTextAreaProps;
 
-export default TextAreaInput;
+export default function TextArea({ name, label, disabled, onChange }: TextAreaProps) {
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const { fieldName, defaultValue, registerField, clearError, error } = useField(name);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputRef,
+      getValue: (ref) => {
+        return ref.current.value;
+      },
+      setValue: (ref, value) => {
+        ref.current.value = value;
+      },
+      clearValue: (ref) => {
+        ref.current.value = '';
+      },
+    });
+  }, [fieldName, registerField]);
+
+  return (
+    <>
+      <label className="flex flex-col group space-y-2">
+        <span className="font-semibold group-focus-within:text-blue-400">{label}</span>
+        <textarea
+          id={fieldName}
+          ref={inputRef}
+          onFocus={clearError}
+          defaultValue={defaultValue}
+          onChange={onChange}
+          required
+          disabled={disabled}
+          rows={4}
+          className={classNames(
+            error ? 'border-red-400' : 'border-gray-500',
+            'w-full py-2 border-2 rounded-xl focus:ring-4 focus-visible:ring-blue-400 outline-none duration-300 ease-out bg-blue-400/10 focus-within:bg-white disabled:bg-gray-500/50 px-3'
+          )}
+        />
+      </label>
+      <span className="text-sm text-red-400">{error}</span>
+    </>
+  );
+}

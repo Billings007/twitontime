@@ -20,7 +20,7 @@
       "@utils/*": ["src/utils/*"],
       "@libs/*": ["src/libs/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@data/": ["src/data/*"]
+      "@data/*": ["src/data/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
