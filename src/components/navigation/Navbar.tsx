@@ -24,21 +24,21 @@ export default function Navbar() {
             </div>
           </Link>
         </div>
-        <div>
+        {/* <div>
           <Link href={'/delete'} passHref className="flex col-end-1">
             <a className="text-base font-medium text-white hover:text-darkMode-4">Delete</a>
           </Link>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Link href={'/post'} passHref className="flex col-end-2">
             <a className="text-base font-medium text-white hover:text-darkMode-4">Post</a>
           </Link>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Link href={'/search'} passHref className="flex col-end-2">
             <a className="text-base font-medium text-white hover:text-darkMode-4">Search</a>
           </Link>
-        </div>
+        </div> */}
         <div className="w-full flex items-center justify-end">
           <SessionButton />
         </div>

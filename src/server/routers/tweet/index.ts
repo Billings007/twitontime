@@ -1,18 +1,21 @@
-import * as trpc from '@trpc/server'
-import { deleteTweetSchema, postTweetSchema } from 'src/data/schemas/TweetSchemas'
-import { deleteTweet, postTweet } from './tweetFunction'
+import { postTweetSchema } from 'src/data/schemas/TweetSchemas';
+import { protectedProcedure, router } from '../../trpc';
+import { postTweet } from './tweetFunction';
 
-export const tweetRouter = trpc
-  .router()
-  .mutation('postTweet', {
-    input: postTweetSchema,
-    async resolve({ input }) {
-      return await postTweet(input)
-    },
-  })
-  .mutation('deleteTweet', {
-    input: deleteTweetSchema,
-    async resolve({ input }) {
-      return await deleteTweet(input)
-    },
-  })
+export const tweetRouter = router({
+  postTweet: protectedProcedure.input(postTweetSchema).mutation(async ({ input }) => {
+    return await postTweet(input);
+  }),
+
+  // deleteTweet: publicProcedure
+  //   .input(deleteTweetSchema)
+  // .mutation
+});
+
+//   .mutation('deleteTweet', {
+//     input: deleteTweetSchema,
+//     async resolve({ input }) {
+//       return await deleteTweet(input)
+//     },
+//   })
+// }
